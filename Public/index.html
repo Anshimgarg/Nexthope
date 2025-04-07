@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Next Hope</title>
+    <link rel="icon" type="image/x-icon" href="Project1icon.jpg">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <style>
+      body{background-color: rgb(18, 234, 148);
+         font-family:cursive; font-style: italic;
+          }
+    </style>
+  
+  
+  </head>
+ 
+  <script>
+        $(document).ready(function(){
+            $("#signup").click(function(){
+              alert();
+                let obj={
+                    type:"get",
+                    url:"/save-details",
+                    data:{
+                        x: $("#txtEmail").val(),
+                        y: $("#txtPwd").val(),
+                        z: $("#txtValue").val(),
+                         }
+                       }
+                    $.ajax(obj)
+                .then(function(responseInJsonAry)
+                {
+                    
+                    $("#res").html(responseInJsonAry)
+                    
+                }).fail(function(err)
+                {
+                    $("#res").html("Duplicate Entry")
+                })
+                
+            })
+
+            function validateSignupForm() {
+	          var email = document.getElementById("txtEmail").value;
+	
+
+	        if (email == "") {
+		          document.getElementById("errorMsg").innerHTML = "Please fill the required field"
+		          return false;
+	          }
+           }
+                
+            $("#login").click(function(){
+                let obj={
+                    type:"get",
+                    url:"/login-details",
+                    data:{
+                        x: $("#txtEmail1").val(),
+                        y: $("#txtPwd1").val()                        
+                    }
+                }
+                $.ajax(obj)
+                .then(function(response)
+                {
+                    $("#res2").html(response);
+                    if(response=="client")
+                    {
+                   
+                    localStorage.setItem("activeUser", $("#txtEmail1").val());
+                    window.location.href="client-dash.html";
+                    }
+                  
+                    else
+                  
+                    if(response=="volunteer")
+                    {
+                  localStorage.setItem("activeUser", $("#txtEmail1").val());
+                  window.location.href="vol-dash.html";
+                }
+
+                else
+                if(response=="Admin")
+                    {
+                  localStorage.setItem("activeUser", $("#txtEmail1").val());
+                  window.location.href="admin-dash.html";
+                }
+
+
+
+
+
+                  else
+                  alert(response);
+                }).fail(function(err)
+                {
+                    $("#res2").html(err)
+                })
+            })
+            
+        })
+        
+  </script>
+  <center>
+    <body>
+
+      <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+
+          <nav class="navbar bg-body-tertiary">
+            <div class="container">
+              <a class="navbar-brand" href="#">
+                <img src="project1icon.jpg" alt="Bootstrap" width="50" height="50">
+              </a>
+              
+               <h3> www.Nexthope.com </h3>
+              
+             
+              <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#signupWin">Signup</button>
+              <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#loginWin">Login</button>
+            
+            </div>
+            
+          </nav>
+          </div>
+      </nav>
+
+      <div class="modal fade" id="signupWin" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form 
+                onsubmit="validateSignupForm()" method="POST">
+                    
+                  <div class="mb-3">
+                      <label>Email address</label>
+                      <input type="email" name="txtEmail" id="txtEmail" >
+                      
+                    </div>
+                    
+                    <div class="mb-3">
+                      <label>Password</label>
+                      <input type="password" name="txtPwd" id="txtPwd">
+                    </div>
+                    
+                    <div class="mb-3">
+                      <label>User Type</label>
+                      <Select name="txtValue" id="txtValue">
+                        <option value="client">Client</option>
+                        <option value="volunteer">Volunteer</option>
+                        <option value="Admin">Admin</option>
+                    </Select>
+                  </div>
+                    <br><br>
+                    
+                    <input type="button" class="btn btn-primary" value="Signup" id="signup">
+                    <hr>
+                      <p id="res"></p>
+                    </form>
+            </div>
+          </div>  
+        </div>
+    </div>
+    <div class="modal fade" id="loginWin" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <form >
+                  
+                <div class="mb-3">
+                    <label>Email address</label>
+                    <input type="email" name="txtEmail1" id="txtEmail1">
+                    
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label>Password</label>
+                    <input type="password" name="txtPwd1" id="txtPwd1">
+                  </div>
+                  <br><br>
+                    
+                  <input type="button" value="Login" id="login" class="btn btn-primary">
+                    <hr>
+                    <p id="res2"></p>
+
+                   
+
+                  </form>
+          </div>
+      </div>  
+  </div>
+  </div>
+
+
+      <div id="carouselExample" class="carousel slide">
+       
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="cardnew.jpg" height="250" width="1550" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="carsal1.jpg"  height="250" width="1550" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="carsal.jpg" height="250" width="1550" alt="...">
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+      
+      
+   <div class="row">
+      <div class="col-md-12 bg-danger text-white fw-bolder fs-4">
+          <center>
+              Our Services
+          </center>
+      </div>
+   </div> 
+  
+   <div class="container ">
+    <div class="row mt-2">
+       <div class="col-md-3 ">
+           <div class="card">
+               <img src="card.png" class="card-img-top" height="200" alt="...">
+               <div class="card-body">
+                 <h5 class="card-title">No beggars</h5>
+                 <p class="card-text">We want beggar free society...</p>
+                
+               </div>
+             </div>
+       </div>
+       <div class="col-md-3">
+           <div class="card">
+               <img src="card1.png" class="card-img-top" height="200" alt="...">
+               <div class="card-body">
+                 <h5 class="card-title">Job oppurtunities</h5>
+                 <p class="card-text">Beggars can get jobs here...</p>
+                 
+               </div>
+             </div>
+       </div>
+       <div class="col-md-3 ">
+           <div class="card">
+               <img src="card2.jpg" class="card-img-top" height="200" alt="...">
+               <div class="card-body">
+                 <h5 class="card-title">Volunteers</h5>
+                 <p class="card-text">Anyone can join as a volunteer...</p>
+                 
+               </div>
+             </div>
+       </div>
+       <div class="col-md-3">
+           <div class="card" >
+               <img src="card4.jpg" class="card-img-top" height="200" alt="...">
+               <div class="card-body">
+                 <h5 class="card-title">Help</h5>
+                 <p class="card-text">You can help as a client...</p>
+                
+               </div>
+             </div>
+       </div>
+    </div>  
+   </div>
+
+   <div class="row">
+    <div class="col-md-12 bg-danger text-white fw-bolder fs-4">
+        <center>
+           Meet the Developers/Team...
+        </center>
+    </div>
+ </div> 
+
+
+ <div class="container">
+  <div class="row">
+     <div class="col-md-3 offset-md-3">
+         <div class="card">
+             <img src="developer.jpg" class="card-img-top" height="240" alt="...">
+             <div class="card-body">
+               <h5 class="card-title">Developed By: Anshim Garg</h5>
+               <p class="card-text">(Student of Btech Cse)</p>
+              
+             </div>
+           </div>
+     </div>
+     <div class="col-md-3 ">
+         <div class="card">
+             <img src="sir imagge.jpg" class="card-img-top" height="190" alt="...">
+             <div class="card-body">
+               <h5 class="card-title">Under the guidance of: Rajesh K. Bansal</h5>
+               <p class="card-text">(SCJP-Sun Certified Java Programmer) </p>
+             </div>
+           </div>
+     </div>
+  </div>
+ </div>
+
+
+
+<div class="row">
+  <div class="col-md-12 bg-danger text-white fw-bolder fs-4">
+      <center>
+         Reach Us
+      </center>
+  </div>
+</div> 
+
+<tr height="300">
+  <th>
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2899.3095062991356!2d74.95017138945568!3d30.21198667806621!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391732a4f07278a9%3A0x4a0d6293513f98ce!2sBanglore%20Computer%20Education!5e0!3m2!1sen!2sin!4v1737121377476!5m2!1sen!2sin" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </th>
+</tr>
+       
+       
+    </body>
+  </center>
+</html>
+
+
+
+

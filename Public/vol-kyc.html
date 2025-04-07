@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Volunteer KYC</title>
+    <link rel="icon" type="image/x-icon" href="Project1icon.jpg">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    
+    <script>
+      function init()
+      {
+        let activeUser=localStorage.getItem("activeUser")
+        document.getElementById("txtEmail").value=activeUser;
+      }
+    </script>
+
+    <script>
+       
+      
+
+        $(document).ready(function(){
+           
+              //------------------------------------------
+              $("#btnFetch").click(function(){
+                let obj={
+                    type:"get",
+                    url:"/do-fetch-one",
+                    data:{
+                        x:$("#txtEmail").val()
+                        
+                    }
+                }
+
+                //sending AJAX Call
+                $.ajax(obj)
+                .then(function(responseInJsonAry)  
+                {
+                    if(responseInJsonAry.length==0)
+                        alert("Invalid Email Id");
+                    else
+                    {
+                        alert(JSON.stringify(responseInJsonAry));
+                        $("#txtName").val(responseInJsonAry[0].name);
+                        $("#txtContactnumber").val(responseInJsonAry[0].contactnumber);
+                        $("#txtAddress").val(responseInJsonAry[0].address);
+                        $("#txtCity").val(responseInJsonAry[0].city);
+                        let dt=responseInJsonAry[0].dob.substr(0,10);
+                        // alert(dt);
+                        $("#txtDob").val(dt);
+                        $("#txtValue").val(responseInJsonAry[0].value);
+                        $("#txtQualification").val(responseInJsonAry[0].qualification);
+                        $("#txtOccupation").val(responseInJsonAry[0].occupation);
+                        $("#txtInfo").val(responseInJsonAry[0].info);
+                        $("#prev").prop("src",responseInJsonAry[0].picpath)
+                        $("#prev1").prop("src",responseInJsonAry[0].idpath)
+                        $("#hdn").val(responseInJsonAry[0].picurl);
+                    }
+                    
+                    
+                }).fail(function(err) //Jab error on server side :-(
+                {
+                    alert(err.message)
+                })
+            })
+        });
+
+          function doShowPrev(fileUpload,prev)
+        {
+            prev.src = window.URL.createObjectURL(fileUpload.files[0])
+        }
+        function doShowPrev1(fileUpload,prev)
+        {
+            prev.src = window.URL.createObjectURL(fileUpload.files[0])
+        }
+
+
+
+
+    </script>
+
+      <style>
+        body{background-color: rgb(18, 234, 148);
+           font-family:cursive; font-style: italic;
+            
+         
+        #1
+        {
+        width: 250px; height: 600px; 
+        float: left;
+        
+        }
+
+        #2
+        {float:left;
+        width: 400px; height: 600px; 
+        }
+        
+        .holder {
+            height: 200px;
+            width: 200px;
+            border: 2px solid black;
+        }
+
+        img {
+            max-width: 200px;
+            max-height: 200px;
+            min-width: 200px;
+            min-height: 200px;
+        }
+
+        input[type="file"] {
+            margin-top: 5px;
+        }
+      
+    }
+    
+
+
+      </style>
+  </head>
+  <body onload="init();">
+    <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+          <span class="navbar-text">
+            www.HelpDesk.com
+          </span>
+        </div>
+      </nav>
+    <center>
+      <h3>Volunteer KYC Form</h3>
+    </center>
+    <br><br>
+    
+    <form class="col-md-50" action="/Register" method="post" enctype="multipart/form-data">
+      <input type="hidden" id="hdn" name="hdnFrm" >
+        
+    
+    <div id="1" style="float: left;">
+        <ol>
+            <center>
+              <p>
+                Profile Pic <input type="file" name="ppic1" id="fileUpload" onchange="doShowPrev(fileUpload,prev);">
+                <br>
+                <img src="" width="100" height="100" alt="" id="prev">
+            </p>
+                
+            </center>
+                    <br>
+            <center>
+              <p>
+                Profile Pic <input type="file" name="ppic2" id="filephoto" onchange="doShowPrev1(filephoto,prev1);">
+                <br>
+                <img src="" width="100" height="100" alt="" id="prev1">
+            </p>
+           
+          </center>
+        </ol>
+    </div>
+    <div class="container-fluid" style="margin-bottom: 10px;">
+    <div id="2">
+        <center>
+          
+          <div class="container text-center">
+            <div class="col-md-10">
+            <div class="row g-3">
+
+              <div class="col-md-8">
+              <label for="inputEmail4" class="form-label">Email</label>
+              <input type="email" class="form-control" name="txtEmail" id="txtEmail">
+            </div>
+            <br>
+            <div class="col-md-4" >
+                <button type="button" class="btn btn-primary" value="Fetch" id="btnFetch">Fetch Details</button>
+              </div>
+              <div id="res">*</div>
+              <br>
+            <div class="col-md-6" >
+              <label for="inputName4" class="form-label">Name</label>
+              <input type="name" class="form-control" name="txtName" id="txtName">
+            </div>
+            <div class="col-md-6">
+                <label for="inputContact number4" class="form-label">Contact number</label>
+                <input type="contactnumber" class="form-control" name="txtContactnumber" id="txtContactnumber">
+              </div>
+            <div class="col-12">
+              <label for="inputAddress" class="form-label">Address</label>
+              <input type="address" class="form-control" name="txtAddress" id="txtAddress" placeholder="1234 Main St">
+            </div>
+
+            <div class="col-md-6">
+              <label for="inputCity" class="form-label">City</label>
+              <input type="city" class="form-control" name="txtCity" id="txtCity">
+            </div>
+            
+             <div class="col-md-6">
+                <label for="inputDob4" class="form-label">Dob</label>
+                <input type="date" class="form-control" name="txtDob" id="txtDob">
+              </div>
+              <br>
+              <div class="mb-3">
+                <label>Gender</label>
+                <Select name="txtValue" id="txtValue">
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+              </Select>
+            </div>
+
+            <div class="col-md-10">
+                <label for="inputQualification4" class="form-label">Qualification</label>
+                <input type="Qualification" class="form-control" name="txtQualification" id="txtQualification">
+              </div>
+              <div class="col-md-10">
+                <label for="inputOccupation4" class="form-label">Occupation</label>
+                <input type="occupation" class="form-control" name="txtOccupation" id="txtOccupation">
+              </div>
+              <br>
+           <div class="form-floating">
+              <textarea class="form-control" placeholder="Leave a comment here" name="txtInfo" id="txtInfo" style="height: 100px"></textarea>
+               <label for="floatingTextarea2">Other Details</label>
+            </div>
+            <br>
+            <div class="col-md-6">
+              <input type="submit" class="btn btn-primary" value="submit">
+            </div>
+            
+            <div class="col-md-6">
+                <button type="submit" class="btn btn-primary" formaction="/do-update">Update</button>
+              </div>
+              <p id="res"></p>
+            </div>
+            </div>
+            </div>
+        </center>
+    </div>
+  </div>
+
+  </div>
+</form>
+  
+
+
+    
+  </body>
+</html>
